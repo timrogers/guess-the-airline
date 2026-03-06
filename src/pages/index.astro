@@ -45,7 +45,7 @@ try {
 
     body {
       font-family: 'Press Start 2P', monospace;
-      background: #0a0a2e;
+      background: #050510;
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -55,40 +55,78 @@ try {
       overflow: hidden;
     }
 
-    /* Starfield background */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(1px 1px at 10% 20%, #fff, transparent),
-        radial-gradient(1px 1px at 30% 65%, #fff, transparent),
-        radial-gradient(1px 1px at 50% 10%, #fff, transparent),
-        radial-gradient(1.5px 1.5px at 70% 40%, #0ff, transparent),
-        radial-gradient(1px 1px at 85% 75%, #fff, transparent),
-        radial-gradient(1px 1px at 15% 80%, #fff, transparent),
-        radial-gradient(1.5px 1.5px at 60% 90%, #f0f, transparent),
-        radial-gradient(1px 1px at 90% 15%, #fff, transparent),
-        radial-gradient(1px 1px at 40% 50%, #fff, transparent),
-        radial-gradient(1px 1px at 25% 35%, #fff, transparent);
-      z-index: 0;
-      animation: twinkle 4s ease-in-out infinite alternate;
+    /* CRT monitor frame */
+    .crt-monitor {
+      position: relative;
+      max-width: 700px;
+      width: 100%;
+      background: #0c0c1a;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow:
+        0 0 60px rgba(0, 0, 0, 0.8),
+        inset 0 0 40px rgba(0, 0, 0, 0.6);
+      z-index: 1;
     }
 
-    @keyframes twinkle {
-      0% { opacity: 0.6; }
-      100% { opacity: 1; }
+    /* CRT screen area */
+    .container {
+      max-width: 640px;
+      width: 100%;
+      background: #111144;
+      border: 3px solid rgba(80, 80, 180, 0.4);
+      border-radius: 10px;
+      padding: 30px 25px;
+      position: relative;
+      z-index: 1;
+      image-rendering: pixelated;
+      overflow: hidden;
+      box-shadow:
+        0 0 20px rgba(60, 60, 180, 0.3),
+        inset 0 0 60px rgba(20, 20, 80, 0.5);
+    }
+
+    /* Subtle grid pattern on the screen */
+    .container::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 20px 20px;
+      pointer-events: none;
+      z-index: 0;
+      border-radius: 10px;
+    }
+
+    /* CRT vignette — dark edges simulating screen curvature */
+    .container::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 10px;
+      background: radial-gradient(
+        ellipse at center,
+        transparent 50%,
+        rgba(0, 0, 0, 0.25) 70%,
+        rgba(0, 0, 0, 0.6) 85%,
+        rgba(0, 0, 0, 0.85) 100%
+      );
+      pointer-events: none;
+      z-index: 50;
     }
 
     /* CRT scanline overlay */
-    body::after {
+    .crt-monitor::after {
       content: '';
-      position: fixed;
-      inset: 0;
+      position: absolute;
+      inset: 24px;
+      border-radius: 10px;
       background: repeating-linear-gradient(
         0deg,
-        rgba(0, 0, 0, 0.15) 0px,
-        rgba(0, 0, 0, 0.15) 1px,
+        rgba(0, 0, 0, 0.12) 0px,
+        rgba(0, 0, 0, 0.12) 1px,
         transparent 1px,
         transparent 3px
       );
@@ -96,36 +134,36 @@ try {
       z-index: 100;
     }
 
-    .container {
-      max-width: 640px;
-      width: 100%;
-      background: #111144;
-      border: 4px solid #0ff;
-      box-shadow:
-        0 0 15px rgba(0, 255, 255, 0.4),
-        0 0 40px rgba(0, 255, 255, 0.15),
-        inset 0 0 30px rgba(0, 255, 255, 0.05);
-      padding: 30px 25px;
+    /* Subtle screen flicker */
+    @keyframes flicker {
+      0% { opacity: 0.97; }
+      5% { opacity: 0.95; }
+      10% { opacity: 0.98; }
+      15% { opacity: 0.96; }
+      20% { opacity: 0.99; }
+      100% { opacity: 0.98; }
+    }
+
+    .container > * {
       position: relative;
       z-index: 1;
-      image-rendering: pixelated;
     }
 
     h1 {
       text-align: center;
-      color: #ff0;
+      color: #f80;
       margin-bottom: 6px;
       font-size: 1.1em;
       text-shadow:
-        0 0 10px #ff0,
-        0 0 30px rgba(255, 255, 0, 0.4);
+        0 0 10px #f80,
+        0 0 30px rgba(255, 136, 0, 0.4);
       line-height: 1.6;
       animation: glow-title 2s ease-in-out infinite alternate;
     }
 
     @keyframes glow-title {
-      0% { text-shadow: 0 0 10px #ff0, 0 0 30px rgba(255, 255, 0, 0.4); }
-      100% { text-shadow: 0 0 15px #ff0, 0 0 50px rgba(255, 255, 0, 0.6); }
+      0% { text-shadow: 0 0 10px #f80, 0 0 30px rgba(255, 136, 0, 0.4); }
+      100% { text-shadow: 0 0 15px #f80, 0 0 50px rgba(255, 136, 0, 0.6); }
     }
 
     .score {
@@ -340,6 +378,7 @@ try {
   </style>
 </head>
 <body>
+  <div class="crt-monitor">
   <div class="container">
     <h1>&#x2708; GUESS THE AIRLINE</h1>
     <div class="pixel-divider"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
@@ -358,6 +397,7 @@ try {
       </div>
     </div>
     <div class="insert-coin" id="insert-coin">PRESS START</div>
+  </div>
   </div>
 
   <script define:vars={{ airlines }}>
